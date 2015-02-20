@@ -1,0 +1,27 @@
+{
+  "name": "handlebartender",
+  "version": "0.0.1",
+  "description": "Allows you to render Handlebar templates anywhere in your backend logic.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/battlejj/handlebartender"
+  },
+  "keywords": [
+    "handlebars",
+    "hbs",
+    "bartender"
+  ],
+  "author": "Jeremy Battle <battlejj@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/battlejj/handlebartender/issues"
+  },
+  "homepage": "https://github.com/battlejj/handlebartender",
+  "dependencies": {
+    "handlebars": "^3.0.0"
+  }
+}
