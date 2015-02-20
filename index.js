@@ -88,6 +88,12 @@ module.exports = function(options){
 
     if(!minimatch(file, partialsPattern) && minimatch(file, templatesPattern)) {
       templateName = file.replace(templatePath, '');
+
+      //remove leading / from templateName if its there
+      if(templateName.slice(0, 1) === '/'){
+        templateName = templateName.slice(1, templateName.length - 1)
+      }
+
       templateName = templateName.replace(path.extname(templateName), '');
       templates[templateName] = Handlebars.compile(path.basename(file, extension), fs.readFileSync(file));
     } else {
