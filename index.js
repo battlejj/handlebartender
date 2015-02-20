@@ -65,7 +65,7 @@ module.exports = function(options){
         .replace('/', '_')
       ;
 
-      Handlebars.registerPartial(partialName, fs.readFileSync(partial));
+      Handlebars.registerPartial(partialName, fs.readFileSync(partial).toString());
     } else {
       //console.log('File %s does not match partialPattern of: %s. Skipping file.', file, partialsPattern);
     }
@@ -95,7 +95,7 @@ module.exports = function(options){
       }
 
       templateName = templateName.replace(path.extname(templateName), '');
-      templates[templateName] = Handlebars.compile(path.basename(file, extension), fs.readFileSync(file));
+      templates[templateName] = Handlebars.compile(fs.readFileSync(file).toString());
     } else {
       //console.log('File %s does not match templatesPattern of: %s. Skipping file.', file, templatesPattern);
     }
