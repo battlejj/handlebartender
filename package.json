@@ -1,6 +1,6 @@
 {
   "name": "handlebartender",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Allows you to render Handlebar templates anywhere in your backend logic.",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/battlejj/handlebartender",
   "dependencies": {
     "handlebars": "^3.0.0",
-    "minimatch": "^2.0.1"
+    "minimatch": "^2.0.1",
+    "recursive-readdir-sync": "^1.0.2"
   }
 }
