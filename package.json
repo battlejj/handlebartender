@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/battlejj/handlebartender",
   "dependencies": {
-    "handlebars": "^3.0.0"
+    "handlebars": "^3.0.0",
+    "minimatch": "^2.0.1"
   }
 }
