@@ -20,11 +20,11 @@ there are many other reasons to do this, perhaps PDF report generation or someth
 How does it work?
 =================
 The usage is pretty simple. You provide at the minimum an absolute or relative path to a directory containing
-handlebars templates.
+handlebars templates. If you are using a relative path, it should be relative to the path of the executing script.
 
 ```javascript
 //assume your location relative to this file is ./resources/templates
-var templates = handlebartender({ templatePath: './resources/templates'});
+var templates = handlebartender({ templatePath: __dirname + '/resources/templates'});
 ````
 
 handlebartender() is a ***BLOCKING*** call, so ***do not expect async behavior***, this operation is intended to only be done once
@@ -69,7 +69,7 @@ If you template path from the root of your site happens to be
 
 ```javascript
   var handlebartender = require('handlebartender');
-  var templates = handlebartender({ templatePath: './resources/templates' });
+  var templates = handlebartender({ templatePath: __dirname + '/resources/templates' });
   var data = {
       title: 'Forgotten Password Email',
       email: 'someone@somewhere.com',

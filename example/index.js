@@ -1,6 +1,5 @@
 var handlebartender = require('../index.js')
-
-  , templates = handlebartender({ templatePath: './hbs/' })
+  , templates = handlebartender({ templatePath: __dirname + '/hbs/' })
   , data = {
     title: 'Homepage',
     slogan: 'Something catchy to get the views'

@@ -1,6 +1,6 @@
 {
   "name": "handlebartender",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Allows you to render Handlebar templates anywhere in your backend logic.",
   "main": "index.js",
   "scripts": {
