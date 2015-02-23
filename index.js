@@ -33,7 +33,7 @@ module.exports = function(options){
   if (path.isAbsolute(options.templatePath)) {
     templatePath = options.templatePath;
   } else {
-    templatePath = path.resolve(__dirname, '..', options.templatePath);
+    templatePath = path.resolve(options.templatePath);
   }
 
   partialsPath = templatePath + '/partials';
@@ -46,7 +46,7 @@ module.exports = function(options){
     if(err.errno === 34){
       console.error('handlebartender: partialPath of %s does not exist. Attempting to continue ' +
       'without use of partials.', partialsPath);
-      return
+      partials = [];
     } else {
       err.message = 'handlebartender: An error occurred while trying to read partialsPath directory with package ' +
       'recursive-readdir: ' + err.message;
@@ -83,6 +83,7 @@ module.exports = function(options){
       throw err;
     }
   }
+
   for(var x = 0, l = hbsTemplates.length, file = null, templateName; x < l; x++){
     file = hbsTemplates[x];
 
