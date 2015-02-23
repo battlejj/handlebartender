@@ -36,7 +36,7 @@ at app startup so once templates are compiled this code should be used in a way 
 //assume you have a template located at ./resources/templates/email/forgotten-password
 //and you passed the *templatePath* of ./resources/templates to handlebartender
 //you can now access it via:
-templates['email/forgotten-password](data);
+templates['email/forgotten-password'](data);
 ```
 
 These directories can be nested with a minor exception, the folder "partials" in that path
@@ -69,11 +69,11 @@ If you template path from the root of your site happens to be
 
 ```javascript
   var handlebartender = require('handlebartender');
-  var templates = handlebartender({ templatePath: './resources/templates });
+  var templates = handlebartender({ templatePath: './resources/templates' });
   var data = {
       title: 'Forgotten Password Email',
       email: 'someone@somewhere.com',
-      resetLink: 'https://yoursite.com/password-reset/some-uuid
+      resetLink: 'https://yoursite.com/password-reset/some-uuid'
     }
     ;
 
