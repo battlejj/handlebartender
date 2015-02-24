@@ -19,11 +19,21 @@ module.exports = function(options){
     , extension = options.extension || '.hbs'
     , templatesPattern
     , partialsPattern
+    , helpers = options.helpers || {}
     ;
 
   if(extension.indexOf('.') < 0){
     //can't think of a use case where an extension would not contain a ., so add one if the person didn't pass it
     extension = '.' + extension;
+  }
+
+  //Load any helpers if they exist, helpers should be an array of key/value pairs. Key will be helper name, value will
+  //be the function associated with it
+
+  for(var key in helpers){
+    if(helpers.hasOwnProperty(key)){
+      Handlebars.registerHelper(key, helpers[key]);
+    }
   }
 
   if (!options.templatePath) {

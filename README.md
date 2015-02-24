@@ -8,6 +8,23 @@ Installing
 npm i handlebartender
 ```
 
+Basic Usage
+-----------
+If you template path from the root of your site happens to be
+
+```javascript
+  var handlebartender = require('handlebartender');
+  var templates = handlebartender({ templatePath: __dirname + '/resources/templates' });
+  var data = {
+      title: 'Forgotten Password Email',
+      email: 'someone@somewhere.com',
+      resetLink: 'https://yoursite.com/password-reset/some-uuid'
+    }
+    ;
+
+  console.log(templates['email/forgotten-password'](data));
+```
+
 What's it for?
 --------------
 If you are using handlebars as a view engine for express you've probably run into the issue
@@ -45,12 +62,17 @@ will always be reserved for holding partials. So if you are following the exampl
 ```
 ./resources/templates/partials
 ```
-would be registered as partials, not as standard templates. If you aren't sure what partials are or how to use them,
-check the handlebars documentation. Customizing the partials path is on the roadmap but not in the current release.
+
+would be registered as partials, not as standard templates.
+
+Partials
+--------
+If you aren't sure what partials are or how to use them,check the handlebars documentation. Customizing the
+partials path is on the roadmap but not in the current release.
 
 You cannot normally nest folders in the partials directory. handlebartender will attempt to load partials in a nested
-file structure but will do so by changing every subdirectory / to a \_. (hypens \[\-\] as wel as dots \[\.\] will also
-be replaced with underscores \[\_\] because using those characters in a partial include is a syntax error for
+file structure but will do so by changing every subdirectory / to a \_. (hyphens \- as well as dots . will also
+be replaced with underscores \_ because using those characters in a partial include is a syntax error for
 handlebars. So for instance if you had:
 
 ```
@@ -63,25 +85,27 @@ you would then access the partial in your template with:
 {{> email_headers_header1}}
 ```
 
-Basic Usage
------------
-If you template path from the root of your site happens to be
+Helpers
+-------
+It is easy to pass helpers into handlebartender as well. Simply pass an object with keys that are the names of helpers
+and their values as the functions to register under that name.
 
+For example:
 ```javascript
   var handlebartender = require('handlebartender');
-  var templates = handlebartender({ templatePath: __dirname + '/resources/templates' });
-  var data = {
-      title: 'Forgotten Password Email',
-      email: 'someone@somewhere.com',
-      resetLink: 'https://yoursite.com/password-reset/some-uuid'
+  var templates = handlebartender({
+    templatePath: __dirname + '/resources/templates',
+    helpers: {
+      json: function(context) {
+        return JSON.stringify(context);
+      }
     }
-    ;
-
-  console.log(templates['email/forgotten-password'](data));
+  });
 ```
 
 Optional Params
 ---------------
-extension (defaults to .hbs)
+**extension**: (defaults to .hbs)
+**helpers**: (defaults to {})
 
 
