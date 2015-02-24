@@ -3,13 +3,13 @@ handlebartender
 Allows you to render Handlebar templates anywhere in your backend logic.
 
 Installing
-==========
+----------
 ```
 npm i handlebartender
 ```
 
 What's it for?
-==============
+--------------
 If you are using handlebars as a view engine for express you've probably run into the issue
 where you want to render some content that isn't strictly a server view to be rendered, but
 you still want to use a templating engine to render it and you want to only use one system
@@ -18,7 +18,7 @@ For me this was rendering e-mail templates before sending them off to users, but
 there are many other reasons to do this, perhaps PDF report generation or something.
 
 How does it work?
-=================
+-----------------
 The usage is pretty simple. You provide at the minimum an absolute or relative path to a directory containing
 handlebars templates. If you are using a relative path, it should be relative to the path of the executing script.
 
