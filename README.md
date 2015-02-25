@@ -92,3 +92,7 @@ Optional Arguments
 ***helpers*** - defaults to {}
 ***extension*** - defaults to .hbs
 
+On pre-1.0 version?
+-------------------
+View the README-0.0.8.md for usage instructions
+
