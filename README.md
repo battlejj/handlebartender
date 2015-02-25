@@ -89,7 +89,9 @@ HBT.Handlebars.registerHelper('link', function(text, url) {
 Optional Arguments
 ------------------
 ***partialsPath*** - defaults to templatePath + '/partials'
+
 ***helpers*** - defaults to {}
+
 ***extension*** - defaults to .hbs
 
 On pre-1.0 version?
