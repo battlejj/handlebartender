@@ -1,25 +1,30 @@
+/*global require */
+'use strict';
 var minimatch = require('minimatch')
   , readSync = require('recursive-readdir-sync')
   , path = require('path')
   , fs = require('fs')
   , Handlebars = require('handlebars')
+  , debug = require('debug')('HBT')
   ;
 
-if(!path.isAbsolute){
-  path.isAbsolute = function(p){
-    return path.resolve(p) === path.normalize(p)
+module.exports = (function(){
+
+  return {
+    compile: compile,
+    Handlebars: Handlebars
   };
-}
 
-module.exports = function(options){
+})();
 
+function compile(options){
   var templatePath
     , partialsPath
-    , templates = {}
     , extension = options.extension || '.hbs'
-    , templatesPattern
+    , templatePattern
     , partialsPattern
     , helpers = options.helpers || {}
+    , templates = {}
     ;
 
   if(extension.indexOf('.') < 0){
@@ -29,26 +34,28 @@ module.exports = function(options){
 
   //Load any helpers if they exist, helpers should be an array of key/value pairs. Key will be helper name, value will
   //be the function associated with it
-
   for(var key in helpers){
     if(helpers.hasOwnProperty(key)){
       Handlebars.registerHelper(key, helpers[key]);
     }
   }
 
-  if (!options.templatePath) {
-    throw new Error('handlebartender: templatePath is a required argument so we know where to look.');
-  }
+  //resolve our location in case it's relative
+  templatePath = path.resolve(options.templatePath);
 
-  if (path.isAbsolute(options.templatePath)) {
-    templatePath = options.templatePath;
+  debug('templatePath provided %s. Using %s', options.templatePath, templatePath);
+
+  if (!options.partialsPath) {
+    partialsPath = templatePath + '/partials';
+    templatePattern = templatePath + '/{!(partials),/**/}*' + extension;
+    partialsPattern = partialsPath + '/**/*' + extension;
+    debug('partialsPath not provided. Defaulting to %s', partialsPath);
   } else {
-    templatePath = path.resolve(options.templatePath);
+    partialsPath = path.resolve(options.partialsPath);
+    debug('partialsPath provided %s. Using %s', options.partialsPath, partialsPath);
+    templatePattern = templatePath + '/**/*' + extension;
+    partialsPattern = partialsPath + '/**/*' + extension;
   }
-
-  partialsPath = templatePath + '/partials';
-  templatesPattern = templatePath + '/{!(partials),/**/}*' + extension;
-  partialsPattern = partialsPath + '/**/*' + extension;
 
   try {
     var partials = readSync(partialsPath);
@@ -77,7 +84,7 @@ module.exports = function(options){
 
       Handlebars.registerPartial(partialName, fs.readFileSync(partial).toString());
     } else {
-      //console.log('File %s does not match partialPattern of: %s. Skipping file.', file, partialsPattern);
+      debug('File %s does not match partialPattern of: %s. Skipping file.', partial, partialsPattern);
     }
 
   }
@@ -97,7 +104,7 @@ module.exports = function(options){
   for(var x = 0, l = hbsTemplates.length, file = null, templateName; x < l; x++){
     file = hbsTemplates[x];
 
-    if(!minimatch(file, partialsPattern) && minimatch(file, templatesPattern)) {
+    if(!minimatch(file, partialsPattern) && minimatch(file, templatePattern)) {
       templateName = file.replace(templatePath, '');
 
       //remove leading / from templateName if its there
@@ -106,11 +113,23 @@ module.exports = function(options){
       }
 
       templateName = templateName.replace(path.extname(templateName), '');
-      templates[templateName] = Handlebars.compile(fs.readFileSync(file).toString());
+
+      if(templateName !== 'render'){
+        templates[templateName] = Handlebars.compile(fs.readFileSync(file).toString());
+      } else {
+        console.log('handlebartender: Template %s using reserved name render. Renaming this template to %s. See docs ' +
+        'for information on how to still access it.', file, '$render');
+        debug('Template %s using reserved name render. Renaming this template to %s. See docs ' +
+        'for information on how to still access it.', file, '$render');
+      }
     } else {
-      //console.log('File %s does not match templatesPattern of: %s. Skipping file.', file, templatesPattern);
+      debug('File %s does not match templatePattern of: %s. Skipping file.', file, templatePattern);
     }
   }
 
+  templates.render = function(t, c){
+    return templates[t](c);
+  };
+
   return templates;
-};
+}

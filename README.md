@@ -10,102 +10,91 @@ npm i handlebartender
 
 Basic Usage
 -----------
-If you template path from the root of your site happens to be
-
 ```javascript
-  var handlebartender = require('handlebartender');
-  var templates = handlebartender({ templatePath: __dirname + '/resources/templates' });
-  var data = {
-      title: 'Forgotten Password Email',
-      email: 'someone@somewhere.com',
-      resetLink: 'https://yoursite.com/password-reset/some-uuid'
-    }
-    ;
+//require handlebartender
+var HBT = require('handlebartender');
 
-  console.log(templates['email/forgotten-password'](data));
+//tell handlebartender where the templates are to compile
+var templates = HBT.compile({
+  templatePath: __dirname + '/some/template/path/'
+});
+
+//you now have two ways to render your templates with data
+var myData = { title: 'Hey!'}
+
+//You should omit the extension name
+templates.render('templateName', myData);
+
+//the above is the equivalent to
+templates['templateName'](myData);
 ```
-
-What's it for?
---------------
-If you are using handlebars as a view engine for express you've probably run into the issue
-where you want to render some content that isn't strictly a server view to be rendered, but
-you still want to use a templating engine to render it and you want to only use one system
-
-For me this was rendering e-mail templates before sending them off to users, but I'm sure
-there are many other reasons to do this, perhaps PDF report generation or something.
-
-How does it work?
------------------
-The usage is pretty simple. You provide at the minimum an absolute or relative path to a directory containing
-handlebars templates. If you are using a relative path, it should be relative to the path of the executing script.
-
-```javascript
-//assume your location relative to this file is ./resources/templates
-var templates = handlebartender({ templatePath: __dirname + '/resources/templates'});
-````
-
-handlebartender() is a ***BLOCKING*** call, so ***do not expect async behavior***, this operation is intended to only be done once
-at app startup so once templates are compiled this code should be used in a way that it doesn't run again.
-
-**templates** variable now contains a structure that uses the files structure relative to your templatePath as keys.
-
-```javascript
-//assume you have a template located at ./resources/templates/email/forgotten-password
-//and you passed the *templatePath* of ./resources/templates to handlebartender
-//you can now access it via:
-templates['email/forgotten-password'](data);
-```
-
-These directories can be nested with a minor exception, the folder "partials" in that path
-will always be reserved for holding partials. So if you are following the example from above the path:
-
-```
-./resources/templates/partials
-```
-
-would be registered as partials, not as standard templates.
 
 Partials
 --------
-If you aren't sure what partials are or how to use them,check the handlebars documentation. Customizing the
-partials path is on the roadmap but not in the current release.
+By default handlebartender will look in your templatePath under the subdirectory 'partials'. For this reason avoid
+storing templates that are not intended to be partials in this directory. You also have the option to pass your
+partialsPath to the compile method if you decide to store them somewhere else.
 
-You cannot normally nest folders in the partials directory. handlebartender will attempt to load partials in a nested
-file structure but will do so by changing every subdirectory / to a \_. (hyphens \- as well as dots . will also
-be replaced with underscores \_ because using those characters in a partial include is a syntax error for
-handlebars. So for instance if you had:
-
+```javascript
+var templates = HBT.compile({
+  templatePath: __dirname + '/some/template/path/',
+  partialsPath: __dirname + '/another/path/'
+});
 ```
-templates/partials/email/headers/header1
-```
 
-you would then access the partial in your template with:
+You can also register a partial the old fashioned way by accessing the handlebartenders internal Handlebars instance.
+If you choose to do this, make sure you do it BEFORE you compile templates, otherwise the partial will not be available
+for use in your templates and you will error out.
 
-```
-{{> email_headers_header1}}
+```javascript
+var HBT = require('handlebartender');
+HBT.Handlebars.registerPartial('header', '<h2>{{title}}</h2>');
 ```
 
 Helpers
 -------
-It is easy to pass helpers into handlebartender as well. Simply pass an object with keys that are the names of helpers
-and their values as the functions to register under that name.
+Adding helpers to handlebartenders is also simple. You can pass a key value pair of a helper name and function as the
+'helper' option to the compile method. For example:
 
-For example:
 ```javascript
-  var handlebartender = require('handlebartender');
-  var templates = handlebartender({
-    templatePath: __dirname + '/resources/templates',
-    helpers: {
-      json: function(context) {
-        return JSON.stringify(context);
-      }
-    }
-  });
+//make a helper we can use
+
+var jsonHelper = function(context) {
+  return JSON.stringify(context);
+};
+
+var templates = HBT.compile({
+  templatePath: __dirname + '/some/template/path/',
+  helpers: {
+    json: jsonHelper
+  }
+});
 ```
 
-Optional Params
----------------
-**extension**: (defaults to .hbs)
-**helpers**: (defaults to {})
+As with partials, you can register a helper with handlebartenders internal Handlebars instance as well. When registering
+a partial via the built in Handlebars instance, you need to do this before compiling templates otherwise you
+will get an error when using it.
 
+```javascript
+HBT.Handlebars.registerHelper('link', function(text, url) {
+  text = HBT.Handlebars.Utils.escapeExpression(text);
+  url  = HBT.Handlebars.Utils.escapeExpression(url);
+
+  var result = '<a href="' + url + '">' + text + '</a>';
+
+  return new HBT.Handlebars.SafeString(result);
+});
+```
+
+Optional Arguments
+------------------
+***partialsPath*** - defaults to templatePath + '/partials'
+
+***helpers*** - defaults to {}
+
+***extension*** - defaults to .hbs
+
+On pre-1.0 version?
+-------------------
+I will create a 0.0.8x branch for anyone interested in the old usage, however, I will not be supporting it.
 
