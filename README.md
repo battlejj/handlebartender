@@ -106,6 +106,7 @@ For example:
 Optional Params
 ---------------
 **extension**: (defaults to .hbs)
+
 **helpers**: (defaults to {})
 
 
