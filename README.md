@@ -96,5 +96,5 @@ Optional Arguments
 
 On pre-1.0 version?
 -------------------
-View the README-0.0.8.md for usage instructions
+I will create a 0.0.8x branch for anyone interested in the old usage, however, I will not be supporting it.
 
