@@ -25,8 +25,8 @@ var myData = { title: 'Hey!'}
 //You should omit the extension name
 templates.render('templateName', myData);
 
-//the above is the equivalent of
-templates\['templateName'\](myData);
+//the above is the equivalent to
+templates['templateName'](myData);
 ```
 
 Partials
