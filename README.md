@@ -71,7 +71,7 @@ var templates = HBT.compile({
 });
 ```
 
-Link with partials, you can register a helper with handlebartenders internal Handlebars instance as well. As with
+As with partials, you can register a helper with handlebartenders internal Handlebars instance as well. As with
 registering a partial via the built in Handlebars instance you must do this before compiling templates that require it
 otherwise you will get an error when using it.
 
