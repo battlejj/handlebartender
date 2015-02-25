@@ -96,5 +96,6 @@ Optional Arguments
 
 On pre-1.0 version?
 -------------------
-I will create a 0.0.8x branch for anyone interested in the old usage, however, I will not be supporting it.
+I have created a 0.0.8x branch for anyone interested in the old usage
+(https://github.com/battlejj/handlebartender/tree/v0.0.8), however, I will not be supporting it.
 
