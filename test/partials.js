@@ -23,6 +23,9 @@ describe('Tests of partial inclusion', function(){
 
     expect(templates.render('home', { name: 'world' })).to.eql(expectedResult);
 
+    HBT.Handlebars.unregisterPartial('partial1');
+    HBT.Handlebars.unregisterPartial('partial2');
+
     done();
 
   });
@@ -39,6 +42,8 @@ describe('Tests of partial inclusion', function(){
 
     expect(templates.render('home', { name: 'partial4' })).to.eql(expectedResult);
 
+    HBT.Handlebars.unregisterPartial('partial4');
+
     done();
 
   });
@@ -54,6 +59,8 @@ describe('Tests of partial inclusion', function(){
     });
 
     expect(templates.render('exterior', {})).to.eql(expectedResult);
+
+    HBT.Handlebars.unregisterPartial('exterior');
 
     done();
 
@@ -73,23 +80,25 @@ describe('Tests of partial inclusion', function(){
 
     expect(templates.render('internal', {})).to.eql(expectedResult);
 
+    HBT.Handlebars.unregisterPartial('manual');
+
     done();
 
   });
 
-  it('Should throw an error when a non-existent partial is included.', function(done){
+  it('Should throw an error when a non-existent partial is included', function(done){
 
-    var expectedResult = 'This template includes an template from outside the root templatePath.This partial is found ' +
-      'outside of the root templates directory.';
 
     var templates = HBT.compile({
       templatePath: __dirname + '/templates'
     });
 
+    //wrap our call in a function for expect syntax purposes
+    function renderCall(){
+      return templates.render('exterior', {});
+    }
 
-    console.log(templates.render('exterior', {}));
-
-    expect(templates.render('exterior', {})).to.throw(Error);
+    expect(renderCall).to.throw(/partial [^\s]+ could not be found/);
 
     done();
 
