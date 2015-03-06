@@ -94,6 +94,13 @@ Optional Arguments
 
 ***extension*** - defaults to .hbs
 
+Tests
+-----
+```
+npm test
+```
+There aren't a ton of tests right. But any contributions on this front are welcome.
+
 On pre-1.0 version?
 -------------------
 I have created a 0.0.8x branch for anyone interested in the old usage
