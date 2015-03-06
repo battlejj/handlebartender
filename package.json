@@ -1,10 +1,10 @@
 {
   "name": "handlebartender",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Allows you to render Handlebar templates anywhere in your backend logic.",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
