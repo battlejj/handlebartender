@@ -99,7 +99,7 @@ Tests
 ```
 npm test
 ```
-There aren't a ton of tests right. But any contributions on this front are welcome.
+There aren't a ton of tests right now. But any contributions on this front are welcome.
 
 On pre-1.0 version?
 -------------------
